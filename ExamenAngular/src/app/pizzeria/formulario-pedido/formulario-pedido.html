@@ -1,0 +1,118 @@
+<div class="max-w-6xl mx-auto px-8 py-10">
+  <div class="mb-8">
+    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Registro de Pedido</h1>
+    
+  </div>
+
+  <form [formGroup]="formPedido" (ngSubmit)="agregar()" class="space-y-10">
+    <!-- Sección Datos del Cliente -->
+    <div>
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Datos del Cliente</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Nombre Completo</label>
+          <input
+            type="text"
+            formControlName="nombre"
+            placeholder="Ej. Mario Juárez"
+            class="w-full px-4 py-2.5 text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Dirección de Entrega</label>
+          <input
+            type="text"
+            formControlName="direccion"
+            placeholder="Calle 5 de Mayo #123"
+            class="w-full px-4 py-2.5 text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 mb-1.5">Teléfono de Contacto</label>
+          <input
+            type="text"
+            formControlName="telefono"
+            placeholder="477-787-2345"
+            class="w-full px-4 py-2.5 text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:bg-white focus:outline-none"
+          />
+        </div>
+      </div>
+    </div>
+
+    <hr class="border-slate-200" />
+
+    <!-- Sección Configuración de la Pizza -->
+    <div>
+      <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Configuración de la Pizza</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-start">
+        <!-- Tamaños -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 uppercase mb-3">1. Selecciona Tamaño:</span>
+          <div class="space-y-3">
+            <label class="flex items-center justify-between p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition" [class.border-amber-500]="formPedido.get('tamano')?.value === 'Chica'">
+              <div class="flex items-center gap-3">
+                <input type="radio" value="Chica" formControlName="tamano" class="text-amber-500 focus:ring-amber-500" />
+                <span class="text-sm font-semibold text-slate-800">Chica</span>
+              </div>
+              <span class="text-sm font-bold text-slate-900">$40</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition" [class.border-amber-500]="formPedido.get('tamano')?.value === 'Mediana'">
+              <div class="flex items-center gap-3">
+                <input type="radio" value="Mediana" formControlName="tamano" class="text-amber-500 focus:ring-amber-500" />
+                <span class="text-sm font-semibold text-slate-800">Mediana</span>
+              </div>
+              <span class="text-sm font-bold text-slate-900">$80</span>
+            </label>
+
+            <label class="flex items-center justify-between p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition" [class.border-amber-500]="formPedido.get('tamano')?.value === 'Grande'">
+              <div class="flex items-center gap-3">
+                <input type="radio" value="Grande" formControlName="tamano" class="text-amber-500 focus:ring-amber-500" />
+                <span class="text-sm font-semibold text-slate-800">Grande</span>
+              </div>
+              <span class="text-sm font-bold text-slate-900">$120</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Ingredientes -->
+        <div>
+          <span class="block text-xs font-bold text-slate-700 uppercase mb-3">2. Ingredientes Extras ($10 c/u):</span>
+          <div class="space-y-3">
+            @for (ing of ingredientesDisponibles; track ing.nombre) {
+              <label class="flex items-center justify-between p-3.5 border rounded-xl cursor-pointer hover:bg-slate-50 transition">
+                <div class="flex items-center gap-3">
+                  <input type="checkbox" [value]="ing.nombre" (change)="onCheckboxChange($event)" class="rounded text-amber-500 focus:ring-amber-500" />
+                  <span class="text-sm font-medium text-slate-800">{{ ing.nombre }}</span>
+                </div>
+                <span class="text-xs font-bold text-slate-500">+$10</span>
+              </label>
+            }
+          </div>
+        </div>
+
+        <!-- Cantidad y Botón -->
+        <div class="flex flex-col justify-between p-6 bg-slate-50 rounded-2xl border border-slate-200">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-2">3. Número de Pizzas</label>
+            <input
+              type="number"
+              formControlName="numPizzas"
+              min="1"
+              class="w-full py-3 text-2xl font-black text-center text-slate-900 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full mt-6 bg-slate-900 hover:bg-black text-white font-bold py-3.5 px-6 rounded-xl shadow-md transition-all active:scale-[0.99] flex items-center justify-center gap-2"
+          >
+            <span>Agregar a la Orden</span>
+            <span>→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

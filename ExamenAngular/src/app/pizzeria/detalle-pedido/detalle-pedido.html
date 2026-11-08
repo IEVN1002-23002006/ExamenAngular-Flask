@@ -1,0 +1,80 @@
+<div class="max-w-6xl mx-auto px-8 py-10 space-y-8">
+  <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div>
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Detalle y Cobro del Pedido</h1>
+      <p class="text-sm text-slate-500 mt-1">
+        Cliente: <span class="text-slate-900 font-bold">{{ cliente.nombre || 'Sin cliente asignado' }}</span>
+        @if (cliente.telefono) { | Tel: <span class="text-slate-600">{{ cliente.telefono }}</span> }
+      </p>
+    </div>
+    <a routerLink="/pedido" class="text-sm font-bold text-amber-600 hover:text-amber-700 transition">
+      + Agregar otra pizza
+    </a>
+  </div>
+
+  <!-- Tabla limpia -->
+  <div class="border border-slate-200 rounded-xl overflow-hidden">
+    <table class="w-full text-left text-sm text-slate-700">
+      <thead class="bg-slate-50 border-b border-slate-200 text-xs font-bold uppercase text-slate-500">
+        <tr>
+          <th class="p-4 text-center w-24">Seleccionar</th>
+          <th class="p-4">Tamaño</th>
+          <th class="p-4">Ingredientes Extras</th>
+          <th class="p-4 text-center">Cantidad</th>
+          <th class="p-4 text-right pr-6">Subtotal</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        @for (p of pizzas; track $index) {
+          <tr
+            (click)="seleccionar($index)"
+            [class.bg-amber-50]="indiceSeleccionado === $index"
+            class="cursor-pointer hover:bg-slate-50 transition"
+          >
+            <td class="p-4 text-center">
+              <input type="radio" name="filaSel" [checked]="indiceSeleccionado === $index" class="text-amber-500 focus:ring-amber-500" />
+            </td>
+            <td class="p-4 font-bold text-slate-900">{{ p.tamano }}</td>
+            <td class="p-4 text-slate-600">{{ p.ingredientes.join(', ') || 'Tradicional (sin extras)' }}</td>
+            <td class="p-4 text-center font-bold text-slate-800">{{ p.numPizzas }}</td>
+            <td class="p-4 text-right pr-6 font-black text-slate-900">${{ p.subtotal }}</td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="p-12 text-center text-slate-400 italic">
+              No hay pizzas en esta orden. Ve a la pestaña "Nuevo Pedido" para armar una.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Barra de liquidación -->
+  <div class="flex flex-col sm:flex-row justify-between items-center gap-6 pt-4 border-t border-slate-200">
+    <button
+      type="button"
+      (click)="quitar()"
+      [disabled]="indiceSeleccionado === -1"
+      class="w-full sm:w-auto px-6 py-3 border border-red-200 text-red-600 hover:bg-red-50 rounded-xl font-bold text-sm disabled:opacity-30 transition"
+    >
+      Quitar Pizza Seleccionada
+    </button>
+
+    <div class="flex items-center gap-8 w-full sm:w-auto justify-end">
+      <div class="text-right">
+        <span class="block text-xs font-bold text-slate-400 uppercase tracking-widest">Total a Pagar</span>
+        <span class="text-4xl font-black text-slate-900">${{ totalPedido }}</span>
+      </div>
+
+      <button
+        type="button"
+        (click)="terminar()"
+        [disabled]="pizzas.length === 0"
+        class="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-md transition disabled:opacity-30 active:scale-[0.99]"
+      >
+        Terminar y Guardar Venta
+      </button>
+    </div>
+  </div>
+</div>

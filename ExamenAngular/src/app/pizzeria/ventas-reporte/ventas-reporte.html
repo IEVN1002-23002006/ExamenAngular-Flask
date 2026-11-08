@@ -1,0 +1,59 @@
+<div class="max-w-6xl mx-auto px-8 py-10 space-y-8">
+  <div>
+    <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Reporte y Corte de Ventas</h1>
+    <p class="text-sm text-slate-500 mt-1">Consulta los ingresos acumulados por día de la semana o por mes</p>
+  </div>
+
+  <!-- Barra de Búsqueda limpia -->
+  <div class="flex flex-col md:flex-row gap-6 items-center justify-between pb-6 border-b border-slate-200">
+    <div class="flex gap-6 text-sm font-bold text-slate-700">
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="radio" value="dia" [(ngModel)]="tipoConsulta" name="tipoFiltro" class="text-slate-900 focus:ring-slate-900" />
+        <span>Por Día</span>
+      </label>
+      <label class="flex items-center gap-2 cursor-pointer">
+        <input type="radio" value="mes" [(ngModel)]="tipoConsulta" name="tipoFiltro" class="text-slate-900 focus:ring-slate-900" />
+        <span>Por Mes</span>
+      </label>
+    </div>
+
+    <div class="flex gap-3 w-full md:w-2/3">
+      <input
+        type="text"
+        [(ngModel)]="parametro"
+        placeholder="Ej: lunes, martes, o noviembre"
+        class="flex-1 px-4 py-2.5 text-sm text-slate-900 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate-900 focus:bg-white focus:outline-none"
+      />
+      <button
+        type="button"
+        (click)="consultar()"
+        class="px-8 py-2.5 bg-slate-900 hover:bg-black text-white font-bold text-sm rounded-lg shadow transition shrink-0"
+      >
+        Consultar Ventas
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de Resultados -->
+  <div class="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-100">
+    @for (v of ventas; track $index) {
+      <div class="p-5 flex justify-between items-center hover:bg-slate-50 transition">
+        <div>
+          <span class="block font-bold text-slate-900 text-base">{{ v.nombreCliente || v.cliente }}</span>
+          <span class="text-xs text-slate-400">{{ v.fecha || 'Fecha registrada' }}</span>
+        </div>
+        <span class="text-2xl font-black text-slate-900">${{ v.total }}</span>
+      </div>
+    } @empty {
+      <div class="py-16 text-center text-slate-400 italic">
+        No hay registros cargados. Escribe un criterio de búsqueda y pulsa "Consultar Ventas".
+      </div>
+    }
+  </div>
+
+  <!-- Total Acumulado -->
+  <div class="flex justify-between items-center pt-4 border-t border-slate-200">
+    <span class="text-sm font-extrabold text-slate-600 uppercase tracking-wide">Total Acumulado del {{ tipoConsulta }}:</span>
+    <span class="text-4xl font-black text-slate-900">${{ totalAcumulado }}</span>
+  </div>
+</div>
